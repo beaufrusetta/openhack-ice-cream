@@ -1,16 +1,35 @@
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    if (req.query.name || (req.body && req.body.name)) {
-        context.res = {
-            // status: 200, /* Defaults to 200 */
-            body: "Hello " + (req.query.name || req.body.name)
-        };
+    // Check for required fields
+    if (req.query) {
+
+        // Check the userId passed in
+        if (req.query.userId) {
+            // Do Something
+        }
+        else {
+            handOffError(context, 400, "Parameter 'userId' is required.")
+        }
+
+        // Check the productId passed in
+        if (req.query.productId) {
+            // Do something
+        }
+        else {
+            handOffError(context, 400, "Parameter 'productId' is required.")
+        }
+
     }
     else {
-        context.res = {
-            status: 400,
-            body: "Please pass a name on the query string or in the request body"
-        };
+        handOffError(context, 400, "Please attach a request body.")
     }
+
 };
+
+function handOffError(context, status, body) {
+    context.res = {
+        status: status, 
+        body: body
+    }
+}
