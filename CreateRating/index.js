@@ -23,21 +23,25 @@ function getDataPromise(url) {
 }
 
 function getUser(userId) {
-    var userUrl = "https://serverlessohuser.trafficmanager.net/api/GetUser"
-    getDataPromise(userUrl)
-        .then(function(user) {
-            return user
-        })
+    var userUrl = `https://serverlessohuser.trafficmanager.net/api/GetUser?userId=${userId}`
+    return getDataPromise(userUrl)
 }
+
+function getProduct(productId) {
+    var productUrl = `https://serverlessohproduct.trafficmanager.net/api/GetProduct?productId=${productId}`
+    return getDataPromise(productUrl)
+}
+
 
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
+    context.log(req.query)
 
-    
-    var productUrl = "https://serverlessohproduct.trafficmanager.net/api/GetProduct"
+    var user = await getUser(req.query.userId)
+    var product = await getProduct(req.query.productId)
 
-    var user = getUser(req.query.userId)
-    console.log(user)
+    context.log(user)
+    context.log(product)
 
     // // Check for required fields
     // if (req.query) {
